@@ -36,14 +36,12 @@ for (int i=0;i<argc;i++)
 }
 
 /*ERROR CHECKING*/
-if(INPFILENAME!="")
-{
-	if (strcmp(INPFILENAME.substr(INPFILENAME.find_last_of(".")).c_str(),".int")!=0)
-		{
-			std::cerr<<"--in <filename> not provided"<<std::endl;
-			exit(0);
-		}
-}
+
+if ( (strcmp(INPFILENAME.c_str(),"") ==0 )  ||	(INPFILENAME.find(".int")==std::string::npos ) || (INPFILENAME.find_last_of(".int") !=  (INPFILENAME.size() -1)) )	{
+		std::cerr<<"--in <filename.int> not provided. "<<std::endl;
+		exit(0);
+	}
+
 if (OUTPUTFILENAME=="")
 	{
 		std::cerr<<"--out <filename> not provided"<<std::endl;
