@@ -13,15 +13,10 @@
 #include <sstream>
 #include <string.h>
 #include <cstdio>
-
-
 #include <stdio.h>
 #include <zlib.h>
 #include <limits.h> /* for PATH_MAX */
 #include <string>
-
-
-
 #include "ReadFiles.hpp"
 #include "SortFile.hpp"
 #include "Part.hpp"
@@ -123,7 +118,7 @@ void part::computation_haplotype(part ind1,part ind2)
 	/*
 	std::cout<<"ind1 "<<"ind2 "<<"chr "<<"start "<<"end "<<"bp_distance "<<" hap1 "<<"hap2"<<std::endl;
 	*/
-	writeInflatedOutFile<<"ind1 "<<"ind2 "<<"chr "<<"start "<<"end "<<"bp_distance "<<" hap1 "<<"hap2"<<std::endl;
+	writeInflatedOutFile<<"ind1 "<<"ind2 "<<"chr "<<"start "<<"end "<<"bp_distance "<<"hap1 "<<"hap2"<<std::endl;
 	for (unsigned long int i=0;i<vec_size;i++)
 	{
 		for (unsigned long int j=i;j<vec_size;j++)
