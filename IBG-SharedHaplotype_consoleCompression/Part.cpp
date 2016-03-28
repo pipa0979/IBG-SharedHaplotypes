@@ -62,7 +62,7 @@ void part::computation_haplotype(part ind1,part ind2)
 	unsigned long int vec_size= vec.size();
 	//unsigned long int c_=0;	/*Top counter*/
 	//unsigned long int cr_=0;	/*Run down Counter*/
-	std::cout<<"ind1 "<<"ind2 "<<"chr "<<"start "<<"end "<<"bp_distance "<<" hap1 "<<"hap2"<<std::endl;
+	std::cout<<"ind1 "<<"ind2 "<<"chr "<<"start "<<"end "<<"bp_distance "<<"hap1 "<<"hap2"<<std::endl;
 	for (unsigned long int i=0;i<vec_size;i++)
 	{
 		for (unsigned long int j=i;j<vec_size;j++)
