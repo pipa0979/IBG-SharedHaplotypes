@@ -1,16 +1,16 @@
-###Version 1 of the shared haplotype program.
+###Version 1.1 of the shared haplotype program.
 
 
 Output is redirected to  gzip pipeline rather than using compression in the program.
 
 
-There are 2 flags:
+There is 1 flag:
 --in <filename.int>
---log <somefilename.log>
 
+The output is piped using:	| gzip > output.gz 
 
 To compile:
 make all
 
 To run:
-./SharedHaplotype --in out1.pop1.gen20.chr10.int --log out1.pop1.gen20.chr10.log > output.txt
+./SharedHaplotype --in out1.pop1.gen20.chr10.int | gzip > output.gz

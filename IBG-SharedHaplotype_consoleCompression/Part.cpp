@@ -20,9 +20,16 @@
 part::part()
 {
 }
+/*
 part::part(ReadFiles fileData)
 {
 	fileName=fileData.getFileName();
+	//std::cout<<fileName<<std::endl;
+}
+*/
+part::part(ReadFiles fileData)
+{
+	fileName=fileData.getInpFileName();
 	//std::cout<<fileName<<std::endl;
 }
 std::string part::quickSort_hapindex(part ind)

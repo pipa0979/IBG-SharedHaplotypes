@@ -12,9 +12,13 @@
 class ReadFiles
 {
 public:
-	std::string fName;
-	bool readFile(const std::string);	/*open and read the input file*/
-	void setFileName(const std::string);
-	std::string getFileName();
+	std::string inpfilename;
+	std::string outfilename;
+	//std::string logfilename;
+	bool readFile(const std::string,const std::string);	/*open and read the input file*/
+	void setFileName(const std::string,const std::string);
+	std::string getInpFileName();
+	std::string getOutFileName();
+
 };
 #endif /* READFILES_HPP_ */

@@ -17,7 +17,7 @@ clock_t begin = clock();
 
 ReadFiles inpfile;
 std::string INPFILENAME="";
-//std::string OUTPUTFILENAME="";
+std::string OUTPUTFILENAME="pass";	/*Not needed. A dummy name passed to make inprogram and console version of the program consistent.*/
 std::string LOGFILENAME="";
 
 
@@ -26,40 +26,45 @@ for (int i=0;i<argc;i++)
 	if(strcmp(argv[i],"--in")==0)
 	{
 		INPFILENAME=argv[++i];
+		//LOGFILENAME=INPFILENAME;
 	}
-	if (strcmp(argv[i],"--log")==0)
+	/*
+	else if (strcmp(argv[i],"--out")==0)
 	{
-		LOGFILENAME=argv[++i];
+		OUTPUTFILENAME=argv[++i];
 	}
-}
-//std::cout<<INPFILENAME<<std::endl;
-//std::cout<<LOGFILENAME<<std::endl;
+	*/
 
-//exit(0);
+}
+
 /*ERROR CHECKING*/
-if(strcmp(INPFILENAME.c_str(),"") ==0)
-{
-	std::cerr<<"--in <filename> not provided"<<std::endl;
-	exit(0);
-}
-if (INPFILENAME.find(".int")!=std::string::npos)
-{
-	
-}
-else
-{
-	std::cerr<<"--in <filename> not provided"<<std::endl;
-	exit(0);
-		
-}
 
-if (strcmp(LOGFILENAME.c_str(),"") == 0)
+if ( (strcmp(INPFILENAME.c_str(),"") ==0 )  ||	(INPFILENAME.find(".int")==std::string::npos ) || (INPFILENAME.find_last_of(".int") !=  (INPFILENAME.size() -1)) )	{
+		std::cerr<<"--in <filename.int> not provided. "<<std::endl;
+		exit(0);
+	}
+
+/*
+if (OUTPUTFILENAME=="")
+	{
+		std::cerr<<"--out <filename> not provided"<<std::endl;
+		exit(0);
+	}
+*/
+/*
+if (LOGFILENAME == "")
 {
 	std::cerr<<"--log <filename> not provided"<<std::endl;
-	exit(0);	
+	exit(0);
 }
+*/
+/*ERROR CHECKING*/
 
-if(!inpfile.readFile(INPFILENAME))
+
+
+
+//std::cout<<"INPFILENAME = "<<INPFILENAME <<std::endl;
+if(!inpfile.readFile(INPFILENAME,OUTPUTFILENAME))
 {
 	std::cerr<<"Couldn't open file "<<INPFILENAME<<" program is exiting"<<std::endl;
 	exit(0);
@@ -69,22 +74,23 @@ part ind2(inpfile);
 part compute;
 //compute.quickSort_hapindex(ind1);
 compute.computation_haplotype(ind1,ind2);
+
+
+
+LOGFILENAME= INPFILENAME.substr(0,INPFILENAME.find(".int"));
+std::ofstream writeLogFile((LOGFILENAME+".log").c_str());	//Create the NON-compressed file
+
+
 clock_t end = clock();
 double elapsed_secs = double(end - begin) / CLOCKS_PER_SEC;
 
-std::ofstream f_writelog;
-f_writelog.open(LOGFILENAME.c_str());
-if(!f_writelog.is_open())
-		{
-			std::cerr<<LOGFILENAME<<" Cannot be opened! Please verify "<<std::endl;
-			exit(0);
-		}
-else
-{
-
-	f_writelog<<"The elapsed time is "<<elapsed_secs<<" seconds";
-}
-f_writelog.close();
+if (!writeLogFile.is_open())
+	{
+		std::cerr<<LOGFILENAME<<" cannot be created.. Program exiting"<<std::endl;
+		exit(0);
+	}
+writeLogFile<<" The elapsed time is "<<elapsed_secs <<" secs."<<std::endl;
+writeLogFile.close();
 
 return 0;
 }
