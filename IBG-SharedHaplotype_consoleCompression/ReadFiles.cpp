@@ -9,15 +9,15 @@
 #include <cstdlib>
 #include <cstring>
 #include "ReadFiles.hpp"
-bool ReadFiles::readFile(const std::string filename)
+bool ReadFiles::readFile(const std::string INPFILENAME,const std::string OUTPUTFILENAME)
 {
-	setFileName(filename);
+	setFileName(INPFILENAME,OUTPUTFILENAME);
 	bool flag;
 	std::string each;
-	std::ifstream fname(filename.c_str());
+	std::ifstream fname(INPFILENAME.c_str());
 	if(!fname.is_open())
 		{
-			std::cerr<<filename<<" Cannot be opened! Please verify "<<std::endl;
+			std::cerr<<INPFILENAME<<" Cannot be opened! Please verify "<<std::endl;
 			exit(0);
 		}
 	else
@@ -36,11 +36,17 @@ bool ReadFiles::readFile(const std::string filename)
 		}
 return flag;
 }
-std::string ReadFiles::getFileName()
+std::string ReadFiles::getInpFileName()
 {
-	return fName;
+	return inpfilename;
 }
-void ReadFiles::setFileName(const std::string filename)
+
+std::string ReadFiles::getOutFileName()
 {
-	fName=filename;
+	return outfilename;
+}
+void ReadFiles::setFileName(const std::string INPFILENAME,const std::string OUTFILENAME)
+{
+	inpfilename=INPFILENAME;
+	outfilename=OUTFILENAME;
 }
