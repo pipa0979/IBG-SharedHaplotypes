@@ -17,6 +17,7 @@
 #include "SortFile.hpp"
 #include "Part.hpp"
 #include "VectorClass.hpp"
+#include "Part.hpp"
 part::part()
 {
 }
@@ -38,13 +39,24 @@ std::string part::quickSort_hapindex(part ind)
 	return compute.ComputeSorting(ind);	//Sort the file
 }
 
-void part::computation_haplotype(part ind1,part ind2)
+void part::setFlags(Flags flag)
 {
+	FLAGS =	flag;
+}
+
+
+
+
+void part::computation_haplotype(part ind1)
+//void part::computation_haplotype(part ind1,part ind2)
+{
+
 	std::string eachi;	//for indexing
 	std::stringstream ss;
-	fileName=quickSort_hapindex(ind1);//Call sorting algo here
+	fileName = quickSort_hapindex(ind1);//Call sorting algo here
 	std::ifstream f_indexing(fileName.c_str());	//Open file to create objects
 	std::vector <VectorClass> vec;
+	unsigned long int min_bp_dist = ind1.FLAGS.getMIN_BP_DISTANCE(); // To avoid recomputing everytime
 	unsigned long int counter=0;
 	while(getline(f_indexing,eachi))
 	{
@@ -79,7 +91,7 @@ void part::computation_haplotype(part ind1,part ind2)
 					if(vec[i].h_ID == vec[j].h_ID)	// If it's the same individual
 						continue;
 					bool flag=false;//false or true
-					if(std::max(vec[i].st,vec[j].st) <= std::min(vec[i].en,vec[j].en))	//if(std::max(ind1.st,ind2.st) - std::min(ind1.en,ind2.en) <= 0)
+		if((std::max(vec[i].st,vec[j].st) <= std::min(vec[i].en,vec[j].en))	 &&  ((std::min(vec[i].en,vec[j].en)  -   std::max(vec[i].st,vec[j].st)  + 1) >= (min_bp_dist)	))	//if(std::max(ind1.st,ind2.st) - std::min(ind1.en,ind2.en) <= 0)
 						flag=true;
 					else
 						flag=false;	//pass. No intervals in common
