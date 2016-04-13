@@ -13,7 +13,7 @@ To compile:
 make all
 
 To run:
-./SharedHaplotype --in out1.pop1.gen20.chr10.int --out testoutput
+./SharedHaplotype --in out1.pop1.gen20.chr10.int --out testoutput --min_bp 100002 
 
 
 

@@ -71,12 +71,17 @@ std::string part::quickSort_hapindex(part ind)
 	return compute.ComputeSorting(ind);	//Sort the file
 }
 
-void part::computation_haplotype(part ind1,part ind2)
+void part::setFlags(Flags flag)
+{
+	FLAGS =	flag;
+}
+
+
+void part::computation_haplotype(part ind1)
 {
 	std::string eachi;	//for indexing
 	std::stringstream ss;
-	fileName=quickSort_hapindex(ind1);//Call sorting algo here
-	
+	fileName=quickSort_hapindex(ind1);//Call sorting algo here	
 	std::ofstream writeInflatedOutFile;	/*Create the NON-compressed file*/
 	writeInflatedOutFile.open ((ind1.ofilename+".txt").c_str());	//can also be ind2
 	if (!writeInflatedOutFile.is_open())
@@ -84,11 +89,9 @@ void part::computation_haplotype(part ind1,part ind2)
 			std::cerr<<ofilename<<" cannot be created.. Program exiting"<<std::endl;
 			exit(0);
 		}
-
-
-
 	std::ifstream f_indexing(fileName.c_str());	//Open file to create objects
 	std::vector <VectorClass> vec;
+	unsigned long int min_bp_dist = ind1.FLAGS.getMIN_BP_DISTANCE(); // To avoid recomputing everytime
 	unsigned long int counter=0;
 	while(getline(f_indexing,eachi))
 		{
@@ -110,14 +113,7 @@ void part::computation_haplotype(part ind1,part ind2)
 		}	//Outer while loop
 	f_indexing.close();
 	std::string each,every;
-	unsigned long int vec_size= vec.size();
-	//unsigned long int c_=0;	/*Top counter*/
-	//unsigned long int cr_=0;	/*Run down Counter*/
-
-
-	/*
-	std::cout<<"ind1 "<<"ind2 "<<"chr "<<"start "<<"end "<<"bp_distance "<<" hap1 "<<"hap2"<<std::endl;
-	*/
+	unsigned long int vec_size= vec.size();	
 	writeInflatedOutFile<<"ind1 "<<"ind2 "<<"chr "<<"start "<<"end "<<"bp_distance "<<"hap1 "<<"hap2"<<std::endl;
 	for (unsigned long int i=0;i<vec_size;i++)
 	{
@@ -180,11 +176,7 @@ void part::computation_haplotype(part ind1,part ind2)
 	{
 
 	}
-
-
 	writeInflatedOutFile.close();	//close the file pointer
-
-
 /*Z-lib C- code call for compression*/
 	char compressed_outFileName[PATH_MAX] = { 0 };
     FILE *writeDeflatedOutFile = fopen(((ind1.ofilename+".txt").c_str()), "r");
@@ -200,15 +192,13 @@ void part::computation_haplotype(part ind1,part ind2)
         fclose(writeDeflatedOutFile);
     	}
 
-    	/*Remove the temporary .txt file*/
+/*Remove the temporary .txt file*/
     	
     if( remove( (ind1.ofilename+".txt").c_str()) != 0 )
     	{
     		std::cerr<< "Error deleting file"<<std::endl;
     		exit(0);
     	}
-    	
-
 }//Function closed
 
 
