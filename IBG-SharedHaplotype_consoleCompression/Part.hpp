@@ -22,12 +22,13 @@ public:
     unsigned long int en;   /*ending of the haplotype sequence of a particular hap_index*/
     unsigned long int hap_index;    /* haplotype number (that particular chromosome strand)*/
     int root_pop;   /* when we have several populations, the genetic information comes from which population*/
-    std::string fileName;
+    std::string fileName; /*Input filename*/
+    std::string ofilename; /*Output filename*/
     void computation_haplotype(part ind1);  /*Compute the haplotype matching*/
     void computation_haplotype_output();
+    void setFlags(Flags);
     std::string quickSort_hapindex(part);
     part(ReadFiles fileData);
     part();
-    void setFlags(Flags);
 };
 #endif /* PART_HPP_ */
