@@ -17,6 +17,7 @@
 #include "SortFile.hpp"
 #include "Part.hpp"
 #include "VectorClass.hpp"
+#include "Part.hpp"
 part::part()
 {
 }
@@ -30,7 +31,6 @@ part::part(ReadFiles fileData)
 part::part(ReadFiles fileData)
 {
 	fileName=fileData.getInpFileName();
-	ofilename=fileData.getOutFileName();
 	//std::cout<<fileName<<std::endl;
 }
 std::string part::quickSort_hapindex(part ind)
@@ -47,43 +47,13 @@ void part::setFlags(Flags flag)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void part::computation_haplotype(part ind1)
+//void part::computation_haplotype(part ind1,part ind2)
 {
+
 	std::string eachi;	//for indexing
 	std::stringstream ss;
-	fileName = quickSort_hapindex(ind1);//Call sorting algo here
-	std::ofstream writeInflatedOutFile;	/*Create the NON-compressed file*/
-	writeInflatedOutFile.open ((ind1.ofilename+".txt").c_str());	//can also be ind2
-	if (!writeInflatedOutFile.is_open())
-		{
-			std::cerr<<ofilename<<" cannot be created.. Program exiting"<<std::endl;
-			exit(0);
-		}
+	fileName = quickSort_hapindex(ind1);//Call sorting algo here,gets the name for sorted filename
 	std::ifstream f_indexing(fileName.c_str());	//Open file to create objects
 	std::vector <VectorClass> vec;
 	unsigned long int min_bp_dist = ind1.FLAGS.getMIN_BP_DISTANCE(); // To avoid recomputing everytime
@@ -109,7 +79,9 @@ void part::computation_haplotype(part ind1)
 	f_indexing.close();
 	std::string each,every;
 	unsigned long int vec_size= vec.size();
-	writeInflatedOutFile<<"ind1 "<<"ind2 "<<"chr "<<"start "<<"end "<<"bp_distance "<<"hap1 "<<"hap2"<<std::endl;
+	//unsigned long int c_=0;	/*Top counter*/
+	//unsigned long int cr_=0;	/*Run down Counter*/
+	std::cout<<"ind1 "<<"ind2 "<<"chr "<<"start "<<"end "<<"bp_distance "<<"hap1 "<<"hap2"<<std::endl;
 	for (unsigned long int i=0;i<vec_size;i++)
 	{
 		for (unsigned long int j=i;j<vec_size;j++)
@@ -119,35 +91,31 @@ void part::computation_haplotype(part ind1)
 					if(vec[i].h_ID == vec[j].h_ID)	// If it's the same individual
 						continue;
 					bool flag=false;//false or true
-					if(std::max(vec[i].st,vec[j].st) <= std::min(vec[i].en,vec[j].en))	//if(std::max(ind1.st,ind2.st) - std::min(ind1.en,ind2.en) <= 0)
+					if((std::max(vec[i].st,vec[j].st) <= std::min(vec[i].en,vec[j].en))	 &&  ((std::min(vec[i].en,vec[j].en)  -   std::max(vec[i].st,vec[j].st)  + 1) >= (min_bp_dist)	))	//if(std::max(ind1.st,ind2.st) - std::min(ind1.en,ind2.en) <= 0)
 						flag=true;
 					else
 						flag=false;	//pass. No intervals in common
+
+					if(vec[i].h_ID < vec[j].h_ID)
+						flag=false;	//The first individual is greater than or equal to the second individual
+
 					if(flag==true)
 						{
-							/*
 
 							std::cout<<vec[i].h_ID <<" "	//individual 1
 									 <<vec[j].h_ID <<" "	//individual 2
 									 <<vec[i].chr  <<" "; //chromosome file number. Can also be ind2.chr since the chr is the .int file number
 							std::cout<<std::max(vec[i].st,vec[j].st)<<" "	//start
 									 <<std::min(vec[i].en,vec[j].en)<<" ";	//end
-							*/
-							writeInflatedOutFile<<vec[i].h_ID <<" "<<vec[j].h_ID <<" "<<vec[i].chr  <<" "<<std::max(vec[i].st,vec[j].st)<<" "<<std::min(vec[i].en,vec[j].en)<<" ";
 
 						}
 					else
 							continue;//No common interval.
-					/*
+
 					std::cout<< std::min(vec[i].en,vec[j].en)  -   std::max(vec[i].st,vec[j].st)  + 1 <<" ";	//bp_distance
 					std::cout<<vec[i].hap<<" ";//hap1 // happlotype 0 or 1 for individual 1
 					std::cout<<vec[j].hap<<std::endl;//hap1 // happlotype 0 or 1 for individual 1
 					//getchar();
-					*/
-					writeInflatedOutFile<<std::min(vec[i].en,vec[j].en)  -   std::max(vec[i].st,vec[j].st)  + 1 <<" ";
-					writeInflatedOutFile<<vec[i].hap<<" ";
-					writeInflatedOutFile<<vec[j].hap<<std::endl;
-
 
 
 				}
@@ -166,11 +134,13 @@ void part::computation_haplotype(part ind1)
 			}
 		}	//Inner for loop closed
 	}	//Outer for loop closed
-
+/*
 	if (remove(fileName.c_str())!=0)
 	{
 
 	}
+
+*/
 }//Function closed
 
 
