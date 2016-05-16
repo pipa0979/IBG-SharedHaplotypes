@@ -128,6 +128,9 @@ void part::computation_haplotype(part ind1)
 						flag=true;
 					else
 						flag=false;	//pass. No intervals in common
+					if(vec[i].h_ID < vec[j].h_ID)
+						flag=false;	//The first individual is greater than or equal to the second individual
+
 					if(flag==true)
 						{
 							/*
